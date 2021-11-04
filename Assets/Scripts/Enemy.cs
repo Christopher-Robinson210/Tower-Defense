@@ -11,10 +11,12 @@ namespace TowerDefense
         Vector3 worldPosition;
 
         public GameObject target;
+        private AudioSource audioSource;
+        public AudioClip deathSound;
         // Start is called before the first frame update
         void Start()
         {
-
+            audioSource = GetComponent<AudioSource>();
         }
 
         // Update is called once per frame
@@ -43,5 +45,12 @@ namespace TowerDefense
 
             }
         }
+
+        public AudioClip GetClip()
+        {
+            return deathSound;
+        }
     }
+
+
 }
