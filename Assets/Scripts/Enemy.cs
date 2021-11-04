@@ -8,6 +8,7 @@ namespace TowerDefense
     {
         public float speed = 1f;
         private bool isCollide = false;
+        Vector3 worldPosition;
 
         public GameObject target;
         // Start is called before the first frame update
@@ -20,6 +21,7 @@ namespace TowerDefense
         void Update()
         {
             Move();
+            
         }
 
         void Move()
@@ -28,6 +30,17 @@ namespace TowerDefense
             {
                 float step = speed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
+                //transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+
+
+                // SET POSITION TO MOUSE LOCATION
+                //Vector3 mousePos = Input.mousePosition;
+                //mousePos.z = Camera.main.nearClipPlane;
+                ////mousePos.z = 0f;
+                //worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+                //transform.position = new Vector3(worldPosition.x, worldPosition.y, 0f);
+                //print($"Mouse: {worldPosition}\nEnemy: {transform.position}");
+
             }
         }
     }

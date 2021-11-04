@@ -7,7 +7,19 @@ TextureImporter:
     second: White_1x1_Right
   - first:
       213: 1782231219445298617
-    second: White_1x1_Center
+    second: White_1x1_Bottom
+  - first:
+      213: -5419371106197559495
+    second: White_1x1_Left
+  - first:
+      213: -8291943048108436448
+    second: White_1x1_4
+  - first:
+      213: 8489846312016213468
+    second: White_1x1_Top
+  - first:
+      213: -6777232874324771089
+    second: White_1x1_To
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -154,7 +166,28 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: White_1x1_Center
+      name: White_1x1_Bottom
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b5f5a6f9d1cbb810800000000000000
+      internalID: 1782231219445298617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: White_1x1
       rect:
         serializedVersion: 2
         x: 0
@@ -168,8 +201,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b5f5a6f9d1cbb810800000000000000
-      internalID: 1782231219445298617
+      spriteID: abca2055bc38c7580800000000000000
+      internalID: -8828036260225176390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: White_1x1_Left
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 937241521b68ac4b0800000000000000
+      internalID: -5419371106197559495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: White_1x1_Top
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1
+        height: 1
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd5f2695d3ef1d570800000000000000
+      internalID: 8489846312016213468
       vertices: []
       indices: 
       edges: []
