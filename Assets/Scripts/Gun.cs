@@ -35,6 +35,7 @@ namespace TowerDefense
 
         private void Update()
         {
+            shotDelay = TowerDefense.GameManager.rateOfFire;
             if (enemyManager.transform.childCount > 0 && Time.timeScale == 1)
             {
                 isShooting = true;

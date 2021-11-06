@@ -11,7 +11,7 @@ public class UpgradeSpeed : TowerDefense.Upgrade
         float rof = TowerDefense.GameManager.rateOfFire;
         base.UseUpgrade();
         //Destroy every enemy on screen.
-        TowerDefense.GameManager.rateOfFire -= rofIncrease;
-        print($"Fire Rate Increased by {rofIncrease * 100}%\nPrevious ROF: {rof} | New ROF: {TowerDefense.GameManager.rateOfFire}");
+        TowerDefense.GameManager.rateOfFire -= (rof * rofIncrease);
+        print($"Fire Rate Increased by {rofIncrease * 100}% | New ROF: {TowerDefense.GameManager.rateOfFire}");
     }
 }

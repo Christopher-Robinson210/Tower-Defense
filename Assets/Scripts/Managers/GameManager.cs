@@ -55,5 +55,10 @@ namespace TowerDefense
                 Instantiate(diamond, new Vector3(Random.Range(-4.5f, 4.5f), Random.Range(-3f,3f), 0f), transform.rotation);
             }
         }
+
+        public void GameOver()
+        {
+
+        }
     }
 }

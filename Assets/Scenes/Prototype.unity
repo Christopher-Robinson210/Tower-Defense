@@ -1556,11 +1556,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveLoot: 3
-  startingFireRate: 9
+  startingFireRate: 1
   maxDiamondDelay: 15
   minDiamondDelay: 3
   diamond: {fileID: 2292577575646564936, guid: b9df96a685054f641adcd73fc97f98aa, type: 3}
-  testDiamondCount: 0
+  testDiamondCount: 200
 --- !u!1 &1737792165
 GameObject:
   m_ObjectHideFlags: 0
