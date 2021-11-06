@@ -6,8 +6,8 @@ namespace TowerDefense
 {
     public class EnemyManager : MonoBehaviour
     {
-        public List<GameObject> enemies = new List<GameObject>();
-
+        public GameManager gameManager;
+        public List<GameObject> enemies;
         [Header("Enemy Wave")]
         public static int waveCount = 0;
         public int defaultWaveSize = 10;
@@ -16,10 +16,13 @@ namespace TowerDefense
         public float spawnRadius = 3f;
         public float spawnX = 8f;
         public float spawnY = 4f;
+        private bool noEnemies = false;
+
         // Start is called before the first frame update
         void Start()
         {
             waveSize = defaultWaveSize;
+            StartCoroutine(SpawnWave());
         }
 
         // Update is called once per frame
@@ -28,31 +31,47 @@ namespace TowerDefense
             CheckForEnemies();
         }
 
-        void CheckForEnemies()
+        public void CheckForEnemies()
         {
 
             if (transform.childCount == 0)
             {
                 //spawn enemies
-                SpawnWave();
-            }
-        }
-
-        void SpawnWave()
-        {
-            waveCount++;
-            //DEBUG INFO
-            print("SpawnEnemies Called");
-            if (waveCount % 5 == 0)
-            {
-                SpawnEnemies(waveSize / 5);
-                // @Todo SpawnBoss();
+                noEnemies = true;
+                
             }
             else
             {
-                SpawnEnemies(waveSize);
+                noEnemies = false;
             }
-            waveSize += waveSizeIncrement;
+        }
+
+        IEnumerator SpawnWave()
+        {
+            while (TowerDefense.GameManager.gameRunning)
+            {
+                yield return new WaitForSecondsRealtime(0.5f);
+                if (noEnemies)
+                {
+                    //noEnemies = false;
+                    if (waveCount > 1)
+                    {
+                        gameManager.SpawnDiamonds();
+                    }
+                    waveCount++;
+                    //DEBUG INFO
+                    if (waveCount % 5 == 0)
+                    {
+                        SpawnEnemies(waveSize / 5);
+                        // @Todo SpawnBoss();
+                    }
+                    else
+                    {
+                        SpawnEnemies(waveSize);
+                    }
+                    waveSize += waveSizeIncrement;
+                }
+            }
         }
 
         public void SpawnEnemies(int enemyCount)
@@ -72,7 +91,6 @@ namespace TowerDefense
                     {
                         Instantiate(randomEnemy, enemyPosition, Quaternion.identity, transform);
 
-                        print($"Enemy Spawned [{i + 1}]");
                         enemySpawned = true;
                     }
                 }

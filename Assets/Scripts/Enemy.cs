@@ -6,24 +6,71 @@ namespace TowerDefense
 {
     public class Enemy : MonoBehaviour
     {
+        public int health = 1;
         public float speed = 1f;
+        public int damage = 5;
+        public float damageDelay = 1f;
         private bool isCollide = false;
-        Vector3 worldPosition;
+        private bool canDamage = true;
+        
+        //Vector3 worldPosition;
 
         public GameObject target;
-        private AudioSource audioSource;
         public AudioClip deathSound;
-        // Start is called before the first frame update
-        void Start()
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
 
+        private void Awake()
+        {
+            canDamage = true;
+        }
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             Move();
             
+        }
+
+        private void OnMouseOver()
+        {
+            if (Input.GetMouseButton(0))
+            {
+                Hit();
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            
+            if (collision.gameObject.tag.Equals("Bullet"))
+            {
+                Destroy(collision.gameObject);
+                Hit();
+
+            }
+
+        }
+
+        
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag.Equals("Player"))
+            {
+                isCollide = true;
+
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag.Equals("Player"))
+            {
+                DoDamage();
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            isCollide = false;
         }
 
         void Move()
@@ -44,6 +91,53 @@ namespace TowerDefense
                 //print($"Mouse: {worldPosition}\nEnemy: {transform.position}");
 
             }
+        }
+
+        public virtual void Hit()
+        {
+            health--;
+            if (health <= 0)
+            {
+                Die();
+            }
+            
+        }
+
+        public void DoDamage()
+        {
+            if (isCollide)
+            {
+                if (canDamage)
+                {
+                    StartCoroutine(WaitForSeconds());
+                    Player.playerHealth -= damage;
+                    print($"Player Health: {Player.playerHealth}");
+                }
+            }
+        }
+
+        IEnumerator WaitForSeconds()
+        {
+            canDamage = false;
+            yield return new WaitForSecondsRealtime(damageDelay);
+            canDamage = true;
+
+        }
+
+        public void Explode()
+        {
+            //do explode effect
+
+            //destroy object
+            TowerDefense.GameManager.killCount++;
+            Destroy(gameObject);
+        }
+
+        void Die()
+        {
+            TowerDefense.GameManager.killCount++;
+            GameObject.Find("GameManager").GetComponent<AudioSource>().PlayOneShot(deathSound);
+            Destroy(gameObject);
         }
 
         public AudioClip GetClip()

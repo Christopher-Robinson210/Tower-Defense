@@ -6,94 +6,128 @@ namespace TowerDefense
 {
     public class Gun : MonoBehaviour
     {
-        public GameObject enemyManager;
-        private ParticleSystem part;
-        private AudioSource audioSource;
-        public List<ParticleCollisionEvent> collisionEvents;
-        public float startSpeed = 20f;
-        public float shotDelay = 1f;
+        //public GameManager gameManager;
+        public TowerDefense.EnemyManager enemyManager;
+        public GameObject bullet;
+        public Transform bulletSpawnLocation;
+        public AudioSource gameManagerAudio;
+        private Transform targetTransform;
+        private bool isShooting = false;
+        
+        private float baseEmitOverTimeRate;
+        public float bulletSpeed = 20f;
+        private float shotDelay = 1f;
+        private bool isAlive = true;
+
 
         private void Awake()
         {
-            part = GetComponent<ParticleSystem>();
-            audioSource = GetComponent<AudioSource>();
-            collisionEvents = new List<ParticleCollisionEvent>();
-            part.Stop();
-            part.Clear();
-            var main = part.main;
-            main.startSpeed = startSpeed;
-            main.duration = shotDelay;
-            main.startLifetime = main.duration;
-            part.Play();
-        }
-        
 
-        // Update is called once per frame
-        void Update()
-        {
-
-            AimAtTarget(FindTarget());
+            
+            
         }
 
-  
-        void OnParticleCollision(GameObject other)
+        private void Start()
         {
-            int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);
-            Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-            int i = 0;
-            print($"Collision Events: {numCollisionEvents}");
-            while (i < numCollisionEvents)
+            shotDelay = TowerDefense.GameManager.rateOfFire;
+            StartCoroutine(Shoot());
+        }
+
+        private void Update()
+        {
+            if (enemyManager.transform.childCount > 0 && Time.timeScale == 1)
             {
-                if (rb)
-                {
-                    print("HIT");
-                    //Vector3 pos = collisionEvents[i].intersection;
-                    //Vector3 force = collisionEvents[i].velocity * 2;
-                    //rb.AddForce(force);
-                    audioSource.PlayOneShot(other.GetComponent<Enemy>().GetClip());
-                    Destroy(other);
-                    part.Clear();
-                }
-                i++;
+                isShooting = true;
+                
             }
-
+            else
+            {
+                isShooting = false;
+            }
         }
-
-        GameObject FindTarget()
+      
+        int FindTargetIndex()
         {
             //FIND THE CHILD ENEMY OF ENEMYMANAGER THAT IS CLOSEST TO THE GUN OBJECT
-            
-            int index = 0;
 
-                //Loop through the children from 0 to 1 less than the child count
-                for (int i = 0; i < enemyManager.transform.childCount - 1; i++)
+            int childIndex = -1;
+            int childCount = enemyManager.transform.childCount;
+            float tempMagnitude = float.PositiveInfinity;
+
+
+            //Loop through the children from 0 to 1 less than the child count
+            for (int i = 0; i < childCount; i++)
+            {
+                
+                if ((enemyManager.transform.GetChild(i).transform.position - transform.position).magnitude < tempMagnitude)
                 {
-                    //set to first index in the loop
-                    index = i;
-                    for (int c = 1; c < enemyManager.transform.childCount; c++)
-                    {
-                        //if the child at index c is closer than child at index i, set indext to child c
-                        if ((enemyManager.transform.GetChild(c).transform.position - transform.position).magnitude < (enemyManager.transform.GetChild(i).transform.position - transform.position).magnitude)
-                        {
-                            index = c;
-                        }
-                    }
+                    tempMagnitude = (enemyManager.transform.GetChild(i).transform.position - transform.position).magnitude;
+                    childIndex = i;
                 }
+                
+            }
 
-            //RETURN THE CHILD OBJECT AT "INDEX"
-            return enemyManager.transform.GetChild(index).gameObject;
+            if (enemyManager.transform.GetChild(childIndex))
+            {
+                return childIndex;
+            }
+            else
+            {
+                return FindTargetIndex();
+            }
+                
         }
 
-        void AimAtTarget(GameObject enemy)
+        void SetTargetTransform(int index)
         {
-            //print($"Target: {enemy.name}");  //Debug purposes
+            targetTransform = enemyManager.transform.GetChild(index);
+        }
 
-            //Set the X axis to correct angle
-            if (enemy)
+        void AimAtTarget()
+        {
+            SetTargetTransform(FindTargetIndex());
+            
+
+            //Look at GameObject using right
+            transform.right = targetTransform.position - transform.position;
+        }
+
+        void CreateBullet()
+        {
+            
+            GameObject newBullet = Instantiate(bullet, new Vector3(bulletSpawnLocation.position.x, bulletSpawnLocation.position.y, 0f), transform.rotation);
+            Rigidbody2D rb = newBullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(newBullet.transform.right * bulletSpeed, ForceMode2D.Force);
+        }
+
+        public void StopShooting()
+        {
+            isShooting = false;
+        }
+
+        public void StartShooting()
+        {
+            isShooting = true;
+        }
+        IEnumerator Shoot()
+        {
+            
+            while (isAlive)
             {
-                transform.right = enemy.transform.position - transform.position;
+                if (isShooting)
+                {
+                    AimAtTarget();
+                    CreateBullet();
+                }
+                yield return new WaitForSeconds(shotDelay);
             }
         }
 
+       
+        public void PlaySound(AudioClip clip)
+        {
+            gameManagerAudio.PlayOneShot(clip);
+        }
+        
     }
 }
