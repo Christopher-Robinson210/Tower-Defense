@@ -1768,7 +1768,7 @@ MonoBehaviour:
   maxLevel: 3
   text: {fileID: 2104195698}
   textDescription: {fileID: 1825300503}
-  rofIncrease: 0.33
+  rofIncrease: 0.15
 --- !u!114 &1801273189
 MonoBehaviour:
   m_ObjectHideFlags: 0
